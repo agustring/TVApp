@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<!--
+    Created by Agustin Copita in 2026 for the exclusive use of Agustin Copita.
+    © 2026 Agustin Copita. All rights reserved.
+-->
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <!-- Fixed 1920x1080 viewport: the TV scales this to the panel resolution -->
+    <meta name="viewport" content="width=1920, height=1080"/>
+    <title>TuViejapp</title>
+    <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+    <!-- =====================================================================
+         VIEW 1 - GRID
+         Netflix-style card grid. The first card opens the streaming-URL view;
+         the rest are the files found on the local HTTP server.
+         ================================================================== -->
+    <div id="grid-view" class="view">
+        <header id="grid-header">
+            <h1>TuViejapp</h1>
+            <!-- Shows the folder currently being browsed ("/" at the root) -->
+            <p id="breadcrumb"></p>
+            <p id="status"></p>
+        </header>
+
+        <!-- Scroll container; the grid itself is a CSS grid that reflows -->
+        <div id="grid-scroll">
+            <div id="grid"></div>
+        </div>
+
+        <footer class="hint">
+            &#9650;&#9660;&#9664;&#9654; Navigate &nbsp;&nbsp;|&nbsp;&nbsp;
+            OK Open / Play &nbsp;&nbsp;|&nbsp;&nbsp;
+            <span id="back-hint">RETURN Exit</span>
+        </footer>
+    </div>
+
+    <!-- =====================================================================
+         VIEW 2 - STREAMING URL
+         Type an HTTP(S) URL or pick one of the presets. Played through AVPlay
+         exactly like a local file.
+         ================================================================== -->
+    <div id="url-view" class="view hidden">
+        <header>
+            <h1>Open streaming URL</h1>
+            <p class="subtitle">HLS (.m3u8) and DASH (.mpd) streams</p>
+        </header>
+
+        <div id="url-rows">
+            <!-- Row 0: free text entry. Focusing it opens the TV on-screen
+                 keyboard; RETURN closes the keyboard again. -->
+            <div class="url-row" id="url-input-row">
+                <span class="url-label">URL</span>
+                <input id="url-input" type="text"
+                       placeholder="http://..." value=""/>
+            </div>
+
+            <!-- Row 1: play whatever is currently typed above -->
+            <div class="url-row url-action" id="url-play-row">
+                &#9654;&nbsp; Play this URL
+            </div>
+
+            <!-- Rows 2+: presets, injected by js/main.js -->
+        </div>
+
+        <footer class="hint">
+            &#9650;&#9660; Navigate &nbsp;&nbsp;|&nbsp;&nbsp;
+            OK Select &nbsp;&nbsp;|&nbsp;&nbsp; RETURN Back
+        </footer>
+    </div>
+
+    <!-- =====================================================================
+         VIEW 3 - PLAYER
+         AVPlay renders onto a hardware video plane that sits *behind* the web
+         page, so everything drawn over it must be transparent or translucent.
+         The <object type="application/avplayer"> element reserves that region.
+         ================================================================== -->
+    <div id="player-view" class="view hidden">
+
+        <object id="av-player" type="application/avplayer"></object>
+
+        <!-- Buffering / loading spinner -->
+        <div id="buffering" class="hidden">
+            <div class="spinner"></div>
+            <div id="buffering-text">Loading...</div>
+        </div>
+
+        <!-- Custom controls overlay (auto-hides after a few seconds) -->
+        <div id="controls">
+            <div id="controls-top">
+                <h2 id="now-playing"></h2>
+            </div>
+
+            <div id="controls-bottom">
+                <div id="seek-row">
+                    <span id="time-current">00:00</span>
+                    <div id="seek-bar">
+                        <div id="seek-buffered"></div>
+                        <div id="seek-progress"></div>
+                        <div id="seek-knob"></div>
+                    </div>
+                    <span id="time-total">00:00</span>
+                </div>
+
+                <div id="button-row">
+                    <span class="ctrl-btn" id="btn-back10">&#171; 10s</span>
+                    <span class="ctrl-btn ctrl-main" id="btn-playpause">&#10074;&#10074;</span>
+                    <span class="ctrl-btn" id="btn-fwd10">10s &#187;</span>
+                </div>
+
+                <div class="hint">
+                    OK Play/Pause &nbsp;&nbsp;|&nbsp;&nbsp;
+                    &#9664;&#9654; Seek 10s &nbsp;&nbsp;|&nbsp;&nbsp;
+                    RETURN Back
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--
+        Samsung TV Web Device API. This resolves on the TV only and is what
+        exposes the global `webapis` object (and therefore webapis.avplay).
+        It 404s in a desktop browser / simulator, which main.js tolerates.
+    -->
+    <script type="text/javascript" src="$WEBAPIS/webapis/webapis.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+# ---------------------------------------------------------------------------
+# Tizen Studio build output
+# ---------------------------------------------------------------------------
+# Debug/ and Release/ hold a full copy of the source plus the signed package,
+# so committing them would duplicate the whole project on every build.
+/Debug/
+/Release/
+.buildResult/
+.sdk_delta.info
+
+# Built packages
+*.wgt
+*.tpk
+
+# ---------------------------------------------------------------------------
+# Signing material -- never commit private keys
+# ---------------------------------------------------------------------------
+*.p12
+*.pfx
+*.pwd
+profiles.xml
+author-signature.xml
+signature*.xml
+
+# ---------------------------------------------------------------------------
+# Editor / IDE
+# ---------------------------------------------------------------------------
+.settings/
+.vscode/
+.idea/
+*.swp
+*~
+
+# ---------------------------------------------------------------------------
+# Node (video-server.js has no dependencies today, but keep this ready)
+# ---------------------------------------------------------------------------
+node_modules/
+npm-debug.log*
+package-lock.json
+
+# ---------------------------------------------------------------------------
+# OS clutter
+# ---------------------------------------------------------------------------
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# ---------------------------------------------------------------------------
+# Local media -- the library is served from disk, never stored in the repo.
+# NOTE: *.ts here means MPEG transport stream. If TypeScript is ever added to
+# this project, remove that line or it will silently ignore the source files.
+# ---------------------------------------------------------------------------
+*.mp4
+*.mkv
+*.avi
+*.mov
+*.m4v
+*.webm
+*.ts

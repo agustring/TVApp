@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Created by Agustin Copita in 2026 for the exclusive use of Agustin Copita.
+    © 2026 Agustin Copita. All rights reserved.
+-->
+<!--
+    Tizen Web App configuration for Samsung Smart TV.
+
+    Viewport      : 1920x1080 (Full HD TV, scaled by the TV to the real panel)
+    internet      : required for fetch() to the local server and for HLS/DASH
+    avplay        : Samsung privilege for the webapis.avplay media pipeline
+    tv.audio      : lets the app control/mix TV audio output during playback
+    tv.inputdevice: required by tizen.tvinputdevice.registerKey() so the
+                    coloured / media buttons on the remote reach the app
+    access "*"    : the app origin differs from the video server origin, so
+                    cross-origin requests must be allowed explicitly
+-->
+<widget xmlns="http://www.w3.org/ns/widgets"
+        xmlns:tizen="http://tizen.org/ns/widgets"
+        id="http://yourdomain/TuViejapp"
+        version="1.1.0"
+        viewmodes="maximized"
+        width="1920"
+        height="1080">
+
+    <name>TuViejapp</name>
+
+    <content src="index.html"/>
+    <icon src="icon.png"/>
+
+    <tizen:application id="TuVieja001.TuViejapp"
+                       package="TuVieja001"
+                       required_version="2.3"/>
+
+    <tizen:profile name="tv"/>
+
+    <feature name="http://tizen.org/feature/screen.size.all"/>
+
+    <access origin="*" subdomains="true"/>
+
+    <!-- Network access (local server + streaming URLs) -->
+    <tizen:privilege name="http://tizen.org/privilege/internet"/>
+
+    <!-- AVPlay media playback (MKV / MP4 / AVI / HLS / DASH) -->
+    <tizen:privilege name="http://developer.samsung.com/privilege/avplay"/>
+
+    <!-- Audio output control while AVPlay is running -->
+    <tizen:privilege name="http://tizen.org/privilege/tv.audio"/>
+
+    <!-- Needed to register the extra remote keys (media / colour buttons) -->
+    <tizen:privilege name="http://tizen.org/privilege/tv.inputdevice"/>
+
+    <tizen:setting screen-orientation="landscape"
+                   context-menu="disable"
+                   background-support="disable"
+                   encryption="disable"
+                   install-location="auto"/>
+</widget>
