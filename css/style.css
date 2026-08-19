@@ -3,7 +3,7 @@
  * © 2026 Agustin Copita. All rights reserved.
  */
 /* ===========================================================================
- * TuViejapp - Samsung Smart TV video player
+ * TVApp (full name: TuViejapp) - Samsung Smart TV video player
  * Base resolution 1920x1080. All sizes are in TV pixels.
  * ======================================================================== */
 
@@ -47,6 +47,16 @@ h1 {
     font-size: 56px;
     font-weight: 700;
     letter-spacing: -1px;
+}
+
+/* Full name, shown small next to the short name in the grid header */
+.app-fullname {
+    font-size: 24px;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: #8b97a3;
+    vertical-align: middle;
+    margin-left: 14px;
 }
 
 .subtitle {

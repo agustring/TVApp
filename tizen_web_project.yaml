@@ -9,7 +9,7 @@ api_version: "10.0"
 build_type: Debug
 
 # Output name for application
-output_name: TuViejapp
+output_name: TVApp
 
 # Output path for build
 output_path: ""

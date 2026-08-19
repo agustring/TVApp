@@ -3,7 +3,7 @@
  * © 2026 Agustin Copita. All rights reserved.
  */
 /**
- * Video server for TuViejapp — a drop-in replacement for `python -m http.server`,
+ * Video server for TVApp (TuViejapp) — a drop-in replacement for `python -m http.server`,
  * since Python isn't installed on this machine (and port 8000 is held by an
  * SSL-enabled Apache).
  *

@@ -1,7 +1,7 @@
 ﻿# Created by Agustin Copita in 2026 for the exclusive use of Agustin Copita.
 # © 2026 Agustin Copita. All rights reserved.
 #
-# Build, package and deploy TuViejapp to a Samsung Smart TV.
+# Build, package and deploy TVApp (full name: TuViejapp) to a Samsung Smart TV.
 #
 # Why not just "tz install"? On a retail TV the set reports
 # secure_protocol:enabled, so arbitrary "sdb shell" commands are refused with
@@ -24,9 +24,9 @@ $ErrorActionPreference = "Stop"
 
 # The project is wherever this script lives, so the repo can be cloned anywhere.
 $Project = if ($PSScriptRoot) { $PSScriptRoot } else { (Get-Location).Path }
-$Wgt     = Join-Path $Project "Debug\TuViejapp.wgt"
+$Wgt     = Join-Path $Project "Debug\TVApp.wgt"
 $AppId   = "TuVieja001.TuViejapp"
-$Remote  = "/home/owner/share/tmp/sdk_tools/tmp/TuViejapp.wgt"
+$Remote  = "/home/owner/share/tmp/sdk_tools/tmp/TVApp.wgt"
 
 # --- locate the Tizen tools -------------------------------------------------
 # Both the VS Code Tizen extension and a full Tizen Studio install are supported.
@@ -49,10 +49,13 @@ $Sdb = Join-Path $TizenTools "sdb.exe"
 $Tz  = Join-Path $TizenTools "tizen-core\tz.exe"
 
 # --- TV address -------------------------------------------------------------
-# Remembered in TUVIEJAPP_TV_IP so it only has to be typed once per machine.
+# Remembered in TVAPP_TV_IP so it only has to be typed once per machine. The old
+# TUVIEJAPP_TV_IP name still works, so machines set up before the rename do not
+# have to be touched.
+if (-not $TvIp) { $TvIp = $env:TVAPP_TV_IP }
 if (-not $TvIp) { $TvIp = $env:TUVIEJAPP_TV_IP }
 if (-not $TvIp) {
-    Write-Host "No TV address. Pass -TvIp <ip> or set TUVIEJAPP_TV_IP." -ForegroundColor Red
+    Write-Host "No TV address. Pass -TvIp <ip> or set TVAPP_TV_IP." -ForegroundColor Red
     exit 1
 }
 $Target = "${TvIp}:26101"

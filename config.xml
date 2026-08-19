@@ -23,7 +23,11 @@
         width="1920"
         height="1080">
 
-    <name>TuViejapp</name>
+    <!-- Short display name shown on the TV launcher. TuViejapp is the full
+         name; it also stays in the application id below, which is the install
+         identity on the TV and must not change. -->
+    <name>TVApp</name>
+    <description>TVApp (full name: TuViejapp) - local network video player for Samsung Smart TVs</description>
 
     <content src="index.html"/>
     <icon src="icon.png"/>

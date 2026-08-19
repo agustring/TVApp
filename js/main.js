@@ -3,7 +3,7 @@
  * © 2026 Agustin Copita. All rights reserved.
  */
 /**
- * TuViejapp - Samsung Smart TV video player (Tizen Web App)
+ * TVApp (full name: TuViejapp) - Samsung Smart TV video player (Tizen Web App)
  * ---------------------------------------------------------------------------
  * The app is a small state machine with three views. Only one is ever visible,
  * and each view owns its own rendering and its own key handling:

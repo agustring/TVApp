@@ -1,4 +1,9 @@
-# TuViejapp
+# TVApp
+
+**Full name: TuViejapp.** "TVApp" is the short name shown on the TV launcher;
+"TuViejapp" is the full name, and it is also the Tizen application id
+(`TuVieja001.TuViejapp`), which is the install identity on the TV and therefore
+stays as it is.
 
 A Tizen Web Application for Samsung Smart TVs that plays video from a folder on
 your own machine, over your local network. It shows a Netflix-style browsable
@@ -96,7 +101,7 @@ TV — not `127.0.0.1`, and not a VPN adapter.
 To avoid retyping the address, set it once:
 
 ```powershell
-$env:TUVIEJAPP_TV_IP = "192.168.1.154"
+$env:TVAPP_TV_IP = "192.168.1.154"
 .\deploy.ps1
 ```
 
@@ -232,3 +237,20 @@ Created by Agustin Copita in 2026 for the exclusive use of Agustin Copita.
 
 This project is **not** open source. No permission is granted to use, copy,
 modify or distribute it without the express written consent of the author.
+
+---
+
+## Development notes
+
+Built with an LLM-assisted workflow (Claude Code). The agent scaffolded the app
+and tooling; the hardware-boundary problems were mine to debug on the physical
+TV.
+
+- Agent-drafted the grid UI, player overlay, and initial deploy script.
+- I diagnosed the parts an agent can't reach without the device: the AVPlay
+  hardware-plane / transparent-body issue, the retail `secure_protocol` refusal
+  that broke `tz install` (fixed via direct `vd_appinstall`), and the HTTP Range
+  server needed for AVPlay seeking.
+
+Result: a working sideloaded TV app, with the hardware/firmware-boundary bugs
+resolved through log- and trace-driven debugging on real hardware.
