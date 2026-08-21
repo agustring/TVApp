@@ -5,6 +5,8 @@ rem TVApp zero-install video server.
 rem Edit video-server.config before starting, or pass a folder and port here.
 rem Usage: video-server.bat "D:\Movies" 8001
 set "TVAPP_CONFIG=%~dp0video-server.config"
+rem Passed to the server below so it can relaunch this file elevated.
+set "TVAPP_SELF=%~f0"
 set "TVAPP_ROOT="
 set "TVAPP_PORT="
 if exist "%TVAPP_CONFIG%" (
@@ -19,7 +21,10 @@ if not defined TVAPP_ROOT set "TVAPP_ROOT=%~dp0"
 if not defined TVAPP_PORT set "TVAPP_PORT=8001"
 
 powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "$lines = Get-Content -LiteralPath '%~f0'; $marker = [Array]::IndexOf($lines, '# --- POWERSHELL SERVER ---'); if ($marker -lt 0) { exit 2 }; & ([scriptblock]::Create(($lines[($marker + 1)..($lines.Count - 1)] -join [Environment]::NewLine)))"
-exit /b %ERRORLEVEL%
+set "EXIT_CODE=%ERRORLEVEL%"
+rem Keep the window up on failure, otherwise a double-click just flashes.
+if not "%EXIT_CODE%"=="0" pause
+exit /b %EXIT_CODE%
 
 # --- POWERSHELL SERVER ---
 $ErrorActionPreference = 'Stop'
@@ -37,6 +42,23 @@ $mime = @{
 if (-not (Test-Path -LiteralPath $root -PathType Container)) {
     Write-Host "Folder not found: $root" -ForegroundColor Red
     exit 1
+}
+
+# Without administrator rights HttpListener can only bind loopback, and a
+# loopback-only server is invisible to the TV, so relaunch this file elevated.
+# The folder and port go along, so command line arguments survive the prompt.
+$identity = [Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()
+if (-not $identity.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+    try {
+        # Elevating cmd.exe, not the .bat: ShellExecute silently declines the
+        # runas verb on a batch file. "call" keeps cmd from mangling the quotes.
+        Start-Process -FilePath $env:ComSpec -Verb RunAs `
+            -ArgumentList '/c', "call `"$env:TVAPP_SELF`" `"$root`" $port"
+    } catch {
+        Write-Host 'Administrator rights are needed to serve the TV. Start again and accept the prompt.' -ForegroundColor Red
+        exit 1
+    }
+    exit 0
 }
 
 function Test-Hidden([string]$name) {
@@ -154,7 +176,7 @@ $listener.Prefixes.Add("http://+:$port/")
 try {
     $listener.Start()
 } catch {
-    Write-Host "Could not listen on port $port. Windows Firewall may need to allow PowerShell." -ForegroundColor Red
+    Write-Host "Could not listen on port $port. Another program may already hold it, or Windows Firewall may be blocking it." -ForegroundColor Red
     exit 1
 }
 Write-Host "Serving $root on http://0.0.0.0:$port/" -ForegroundColor Green

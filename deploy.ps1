@@ -24,7 +24,9 @@ $ErrorActionPreference = "Stop"
 
 # The project is wherever this script lives, so the repo can be cloned anywhere.
 $Project = if ($PSScriptRoot) { $PSScriptRoot } else { (Get-Location).Path }
-$Wgt     = Join-Path $Project "Debug\TVApp.wgt"
+# tz names the .wgt after the project folder, not the output_name set in
+# tizen_web_project.yaml, so follow the folder instead of hardcoding a name.
+$Wgt     = Join-Path (Join-Path $Project "Debug") ((Split-Path $Project -Leaf) + ".wgt")
 $AppId   = "TuVieja001.TuViejapp"
 $Remote  = "/home/owner/share/tmp/sdk_tools/tmp/TVApp.wgt"
 

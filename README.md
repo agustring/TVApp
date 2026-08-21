@@ -84,6 +84,10 @@ Then double-click `video-server.bat`. It uses Windows PowerShell, which is built
 into Windows, and does not require Node.js, npm, or any other installation. If
 `root=` is left blank, it serves the folder containing the batch file.
 
+Windows asks for administrator rights as it starts. The server has to listen on
+every network address for the TV to reach it, and Windows only grants that to an
+elevated process, so accept the prompt; the server window opens behind it.
+
 You can also start it from Command Prompt with an explicit folder and port:
 
 ```bat
@@ -126,7 +130,7 @@ It builds, packages, connects, installs, and launches the app. Tizen Studio or
 the VS Code Tizen extension must already be installed; the launcher can detect
 the tools automatically, or you can set `tizen_tools` in the config file.
 
-Set `no_build=true` when only an existing `Debug\TVApp.wgt` should be installed.
+Set `no_build=true` when only the existing package in `Debug` should be installed.
 
 ```powershell
 .\deploy.ps1 -TvIp 192.168.1.154
