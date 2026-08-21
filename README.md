@@ -34,7 +34,7 @@ It can also open an arbitrary HLS or DASH streaming URL.
 |---|---|
 | TV | Samsung Smart TV with Tizen 5.0 or newer, in Developer Mode |
 | PC | Windows, on the **same network** as the TV |
-| Node.js | v16+ (only to run the bundled video server; no npm packages needed) |
+| PC video server | `video-server.bat` uses Windows PowerShell, already included with Windows; no Node.js or npm installation is needed |
 | Tizen tooling | [Tizen Studio](https://developer.tizen.org/development/tizen-studio/download) **or** the VS Code Tizen extension |
 
 The app is signed with the **default Tizen certificates**, which a TV accepts
@@ -51,7 +51,11 @@ index.html           The three views (grid / streaming URL / player)
 js/main.js           All application logic
 css/style.css        Styling
 icon.png             512x512 launcher icon
-video-server.js      Local HTTP video server (Node, no dependencies)
+video-server.bat      Zero-install local HTTP video server (single Windows file)
+video-server.config   Folder and port settings read by the batch launcher
+video-server.js       Optional Node.js version for development
+deploy-tv.bat         Double-click build, install and launch helper
+deploy-tv.config      TV IP and deployment settings
 deploy.ps1           Build + install + launch helper (PowerShell)
 ```
 
@@ -67,6 +71,28 @@ deploy.ps1           Build + install + launch helper (PowerShell)
 4. Restart the TV.
 
 ### 2. Serve your video folder
+
+For the simplest setup, copy `video-server.bat` and `video-server.config` to the
+Windows PC. Edit `video-server.config` before starting:
+
+```ini
+root=D:\Movies
+port=8001
+```
+
+Then double-click `video-server.bat`. It uses Windows PowerShell, which is built
+into Windows, and does not require Node.js, npm, or any other installation. If
+`root=` is left blank, it serves the folder containing the batch file.
+
+You can also start it from Command Prompt with an explicit folder and port:
+
+```bat
+video-server.bat "D:\Movies" 8001
+```
+
+Leave the window open while you use the app. Press `Ctrl+C` to stop the server.
+
+The original Node.js server remains available for development:
 
 ```powershell
 node video-server.js "D:\Movies" 8001
@@ -93,6 +119,14 @@ Find your IP with `ipconfig`. It must be the address on the same subnet as the
 TV — not `127.0.0.1`, and not a VPN adapter.
 
 ### 4. Build and deploy
+
+For a double-click workflow, edit `deploy-tv.config` and set `tv_ip` to the
+address entered in the TV's Developer Mode. Then double-click `deploy-tv.bat`.
+It builds, packages, connects, installs, and launches the app. Tizen Studio or
+the VS Code Tizen extension must already be installed; the launcher can detect
+the tools automatically, or you can set `tizen_tools` in the config file.
+
+Set `no_build=true` when only an existing `Debug\TVApp.wgt` should be installed.
 
 ```powershell
 .\deploy.ps1 -TvIp 192.168.1.154
